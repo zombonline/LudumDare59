@@ -7,5 +7,6 @@ public interface IInteractable
     public void OnGrab();
     public void OnRelease();
     public void OnDrag(Vector2 delta);
-    Vector3? DesiredHandPosition { get; }
+    Transform? DesiredHandTransform { get; }
+    HandController.HandAnim HandAnim { get; }
 }

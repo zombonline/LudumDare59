@@ -440,12 +440,13 @@ namespace EPOOutline
                         parametersToUpdate.TextureHandleMap[cutoutTexture] = rtHandle;
                     }
 
-                    if (outlineTarget.Renderer is SpriteRenderer spriteRenderer)
+                    if (outlineTarget.Renderer is SpriteRenderer spriteRenderer && spriteRenderer.sprite != null)
                     {
                         var texture = spriteRenderer.sprite.texture;
                         var rtHandle = parametersToUpdate.RTHandlePool.Allocate(texture);
                         parametersToUpdate.TextureHandleMap[texture] = rtHandle;
                     }
+
                 }
             }
         }

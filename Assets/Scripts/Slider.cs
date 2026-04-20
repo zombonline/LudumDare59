@@ -1,4 +1,5 @@
 using System;
+using EPOOutline;
 using UnityEngine;
 
 public class Slider : MonoBehaviour, IInteractable, ISignalSource
@@ -18,6 +19,15 @@ public class Slider : MonoBehaviour, IInteractable, ISignalSource
     [SerializeField] private int incrementCount = 5;
 
     private float _rawValue = 0.5f;
+    
+    [SerializeField] Outlinable outlinable;
+    [SerializeField] HandController.HandAnim  handAnim;
+    public HandController.HandAnim HandAnim => handAnim;
+    
+    [SerializeField] private Transform handPos;
+    public Transform? DesiredHandTransform => handPos!=null ? handPos : null;
+    
+    [SerializeField] private InteractionAudioPlayer audioPlayer;
 
     public float Value
     {
@@ -38,14 +48,23 @@ public class Slider : MonoBehaviour, IInteractable, ISignalSource
 
     public void OnHoverEnter()
     {
+        outlinable.enabled = true;
     }
 
-    public void OnHoverExit() {}
-    public void OnGrab() {}
+    public void OnHoverExit()
+    {
+        outlinable.enabled = false;
+    }
+
+    public void OnGrab()
+    {
+        audioPlayer?.OnGrab();
+    }
 
     public void OnRelease()
     {
         UpdateHandlePosition(false);
+        audioPlayer?.OnRelease();
     }
 
     public void OnDrag(Vector2 worldDelta)
@@ -53,9 +72,9 @@ public class Slider : MonoBehaviour, IInteractable, ISignalSource
         float delta = vertical ? worldDelta.y : worldDelta.x;
         _rawValue = Mathf.Clamp01(_rawValue + delta * sensitivity);
         UpdateHandlePosition(true);
+        audioPlayer?.OnDrag(worldDelta);
     }
 
-    public Vector3? DesiredHandPosition => handle.position;
 
     private void UpdateHandlePosition(bool useRawValue = false)
     {

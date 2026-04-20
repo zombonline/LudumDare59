@@ -92,7 +92,7 @@ public class InterferenceController : MonoBehaviour
             {
                 if (binding.label != req.label || binding.SignalSource == null) continue;
 
-                total += req.Evaluate(binding.SignalSource.Value, progress);
+                total += req.Evaluate(binding.SignalSource, progress);
                 count++;
                 break;
             }

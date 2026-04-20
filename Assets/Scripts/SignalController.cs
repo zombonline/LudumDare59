@@ -11,8 +11,10 @@ public class SignalController : MonoBehaviour
         public string label;                        // matches SignalRequirement.label
         public MonoBehaviour source;
         public TextMeshProUGUI feedbackText;
+        public MonoBehaviour signalDisplay;
 
         [NonSerialized] public ISignalSource SignalSource;
+        [NonSerialized] public ISignalDisplay SignalDisplay;
         [NonSerialized] public SignalRequirement Requirement; // assigned at runtime
     }
 
@@ -29,9 +31,11 @@ public class SignalController : MonoBehaviour
         foreach (var binding in bindings)
         {
             binding.SignalSource = binding.source as ISignalSource;
+            binding.SignalDisplay = binding.signalDisplay as ISignalDisplay;
 
             if (binding.SignalSource == null)
                 Debug.LogError($"[SignalController] {binding.source.name} does not implement ISignalSource.");
+            
         }
     }
     
@@ -50,10 +54,11 @@ public class SignalController : MonoBehaviour
         {
             if (binding.SignalSource == null || binding.Requirement == null) continue;
 
-            float score = binding.Requirement.Evaluate(binding.SignalSource.Value, AudioController.Instance.GetMessageProgress());
+            float score = binding.Requirement.Evaluate(binding.SignalSource, AudioController.Instance.GetMessageProgress());
             total += score;
             activeCount++;
             binding.feedbackText.text = binding.Requirement.label + ": " + score + "/1\n";
+            binding.SignalDisplay?.UpdateDisplay(score);
         }
 
         SignalQuality = activeCount > 0 ? total / activeCount : 0f;

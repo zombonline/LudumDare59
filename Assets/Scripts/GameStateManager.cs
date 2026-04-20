@@ -113,7 +113,7 @@ public class GameStateManager : MonoBehaviour
 
         OnStateChanged?.Invoke(newState);
 
-        tuningScreen.transform.position = newState == GameState.Tuning ? Vector3.zero : Vector3.up * 100;
+        // tuningScreen.transform.position = newState == GameState.Tuning ? Vector3.zero : Vector3.up * 100;
         transcribingScreen.transform.position = newState == GameState.Transcribing ? Vector3.zero : Vector3.up * 100;
         resultScreen.transform.position = newState == GameState.Result ? Vector3.zero : Vector3.up * 100;
     }

@@ -9,6 +9,8 @@ public class TextInput : MonoBehaviour
     public event Action onEnterPressed;
 
     public string Text { get; private set; } = "";
+    
+    public event Action<int> onTextLengthChanged;
 
     private void Start()
     {
@@ -53,6 +55,8 @@ public class TextInput : MonoBehaviour
 
     private void SetText(string newText)
     {
+        var diff = newText.Length - Text.Length;
+        onTextLengthChanged?.Invoke(diff);
         Text = newText;
         textComponent.text = Text;
         textComponent.ForceMeshUpdate();
