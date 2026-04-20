@@ -1,0 +1,10 @@
+Signal Interface Ready For Export.png
+	size: 2156, 1085
+	filter: Linear, Linear
+	scale: 0.5
+BG
+	bounds: 2, 2, 1921, 1081
+Steam Whisp
+	bounds: 1925, 134, 28, 348
+bulb
+	bounds: 1925, 484, 229, 599
