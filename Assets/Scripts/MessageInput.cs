@@ -25,9 +25,11 @@ public class MessageInput : MonoBehaviour
 
     private void OnGameStateChanged(GameStateManager.GameState newState)
     {
-        if(newState != GameStateManager.GameState.Transcribing)
+        if (newState != GameStateManager.GameState.Transcribing)
             return;
-        eventSystem.SetSelectedGameObject(inputField.gameObject, null);
-        inputField.OnPointerClick(null);
+    
+        inputField.ActivateInputField();
+        inputField.Select();
     }
+
 }

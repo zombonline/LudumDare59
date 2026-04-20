@@ -12,6 +12,7 @@ public class HandController : MonoBehaviour
     private IInteractable heldInteractable;
     private Camera mainCamera;
     [SerializeField] private float sensitivity;
+    [SerializeField] private GameObject spriteObject;
 
     private void Start()
     {
@@ -39,7 +40,8 @@ public class HandController : MonoBehaviour
             if(heldInteractable.DesiredHandPosition.HasValue)
                 transform.position = heldInteractable.DesiredHandPosition.Value;
             
-            if (Mouse.current.leftButton.wasReleasedThisFrame)
+            if (Mouse.current.leftButton.wasReleasedThisFrame
+                && GameStateManager.Instance.CurrentState == GameStateManager.GameState.Tuning)
                 Release();
 
             return;
@@ -100,11 +102,19 @@ public class HandController : MonoBehaviour
     {
         if (state != GameStateManager.GameState.Tuning)
         {
+            Cursor.lockState = CursorLockMode.None;
             currentHovered?.OnHoverExit();
             currentHovered = null;
             heldInteractable?.OnRelease();
             heldInteractable = null;
             State = HandState.Free;
         }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        
+        spriteObject.SetActive(state != GameStateManager.GameState.Result);
     }
+
 }

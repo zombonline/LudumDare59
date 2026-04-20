@@ -6,12 +6,15 @@ public class GameStateManager : MonoBehaviour
     public enum GameState { Tuning, Transcribing, Result }
 
     public static GameStateManager Instance { get; private set; }
-
     public event Action<GameState> OnStateChanged;
     public GameState CurrentState { get; private set; }
+    [SerializeField] private Message[] messages;
+    private int _currentMessageIndex = 0;
+    public Message CurrentMessage => messages[_currentMessageIndex];
+
     public float TimeRemaining { get; private set; }
 
-    [SerializeField] private Transform tuningScreen, transcribingScreen;
+    [SerializeField] private Transform tuningScreen, transcribingScreen, resultScreen;
 
     [Header("Signal")]
     [SerializeField] private SignalController signalController;
@@ -21,6 +24,7 @@ public class GameStateManager : MonoBehaviour
 
     [Header("Transcribing")]
     [SerializeField] private float transcribeTimeLimit = 60f;
+    [SerializeField] private TextInput transcribeInput;
 
     private bool _messageStarted = false;
 
@@ -30,7 +34,21 @@ public class GameStateManager : MonoBehaviour
         Instance = this;
     }
 
-    private void Start() => SetState(GameState.Tuning);
+    private void Start()
+    {
+        SetState(GameState.Tuning);
+        transcribeInput.onEnterPressed += OnTranscribeComplete;
+    }
+
+    private void OnDestroy()
+    {
+        transcribeInput.onEnterPressed -= OnTranscribeComplete;
+    }
+
+    private void OnTranscribeComplete()
+    {
+        SetState(GameState.Result);
+    }
 
     private void Update()
     {
@@ -46,10 +64,11 @@ public class GameStateManager : MonoBehaviour
         if (!_messageStarted && signalController.SignalQuality >= messageThreshold)
         {
             _messageStarted = true;
+            messageAudioSource.clip = messages[_currentMessageIndex].audioClip;
             messageAudioSource.Play();
         }
 
-        if (_messageStarted && !messageAudioSource.isPlaying)
+        if (_messageStarted && !messageAudioSource.isPlaying && Application.isFocused)
             SetState(GameState.Transcribing);
     }
 
@@ -63,18 +82,39 @@ public class GameStateManager : MonoBehaviour
             Submit();
         }
     }
+    
+    /// <summary>Called by the Result screen continue button to load the next message.</summary>
+    public void NextMessage()
+    {
+        _currentMessageIndex++;
+
+        if (_currentMessageIndex >= messages.Length)
+        {
+            // TODO: end game / credits
+            Debug.Log("[GameStateManager] All messages complete.");
+            return;
+        }
+
+        _messageStarted = false;
+        transcribeInput.Clear();
+        SetState(GameState.Tuning);
+    }
+
 
     public void Submit() => SetState(GameState.Result);
 
     private void SetState(GameState newState)
     {
+        if (newState == GameState.Tuning)
+            signalController.LoadRequirements(messages[_currentMessageIndex]);
         CurrentState = newState;
         if (newState == GameState.Transcribing)
             TimeRemaining = transcribeTimeLimit;
 
         OnStateChanged?.Invoke(newState);
 
-        tuningScreen.gameObject.SetActive(newState == GameState.Tuning);
-        transcribingScreen.gameObject.SetActive(newState == GameState.Transcribing);
+        tuningScreen.transform.position = newState == GameState.Tuning ? Vector3.zero : Vector3.up * 100;
+        transcribingScreen.transform.position = newState == GameState.Transcribing ? Vector3.zero : Vector3.up * 100;
+        resultScreen.transform.position = newState == GameState.Result ? Vector3.zero : Vector3.up * 100;
     }
 }

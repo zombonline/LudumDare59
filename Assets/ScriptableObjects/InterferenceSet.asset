@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b30441902563db459d02562f3e5d4d9, type: 3}
+  m_Name: InterferenceSet
+  m_EditorClassIdentifier: Assembly-CSharp::InterferenceSet
+  clips:
+  - {fileID: 8300000, guid: 30b9515b6fc0459489da28ca3779b4b7, type: 3}
+  - {fileID: 8300000, guid: 0af04fd0f127c8b4cb7467f9985236de, type: 3}
+  - {fileID: 8300000, guid: f4be8b8da78aa534486a3cf7780486c1, type: 3}
+  playIntervalRange: {x: 2, y: 4}
