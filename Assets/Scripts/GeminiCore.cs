@@ -6,6 +6,8 @@ using TMPro;
 
 public class GeminiCore : MonoBehaviour
 {
+    /// <summary>Fired when the AI response has been received and displayed.</summary>
+    public event Action OnResponseReady;
     [Header("API Configuration")]
     private string apiKey;
 
@@ -16,6 +18,10 @@ public class GeminiCore : MonoBehaviour
     [Header("UI References")]
     public TextInput textInput;
     public TMP_Text outputText;
+
+    [Header("Fallback")]
+    [SerializeField] private FallbackEvaluator fallbackEvaluator;
+    [SerializeField] private int requestTimeoutSeconds = 8;
 
     private void Awake()
     {
@@ -40,7 +46,7 @@ public class GeminiCore : MonoBehaviour
         if (!string.IsNullOrEmpty(player))
         {
             string prompt = BuildPrompt(original, player);
-            StartCoroutine(SendPrompt(prompt));
+            StartCoroutine(SendPrompt(prompt, original, player));
 
             outputText.text = "Evaluating...";
         }
@@ -51,7 +57,7 @@ public class GeminiCore : MonoBehaviour
     }
     
 
-    public IEnumerator SendPrompt(string userPrompt)
+    public IEnumerator SendPrompt(string userPrompt, string original, string playerText)
     {
         GeminiRequest requestData = new GeminiRequest();
         requestData.contents = new Content[] {
@@ -76,12 +82,14 @@ public class GeminiCore : MonoBehaviour
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
+            request.timeout = requestTimeoutSeconds;
 
             yield return request.SendWebRequest();
 
             if (request.result != UnityWebRequest.Result.Success)
             {
                 Debug.LogError("Full Error Report: " + request.downloadHandler.text);
+                RunFallback(original, playerText);
             }
             else
             {
@@ -106,16 +114,19 @@ public class GeminiCore : MonoBehaviour
                         {
                             outputText.text = "Invalid response format.";
                         }
+                        OnResponseReady?.Invoke();
                     }
                     catch (Exception e)
                     {
                         Debug.LogError("JSON Parse Error: " + e.Message);
                         outputText.text = "Failed to parse AI response.";
+                        OnResponseReady?.Invoke();
                     }
                 }
                 else
                 {
                     outputText.text = "No response received.";
+                    OnResponseReady?.Invoke();
                 }
             }
         }
@@ -170,6 +181,23 @@ public class GeminiCore : MonoBehaviour
         public string consequence;
         public string response;
     }
+    private void RunFallback(string original, string playerText)
+    {
+        if (fallbackEvaluator == null)
+        {
+            Debug.LogWarning("[GeminiCore] No FallbackEvaluator assigned.");
+            OnResponseReady?.Invoke();
+            return;
+        }
+
+        Message message = GameStateManager.Instance.CurrentMessage;
+        fallbackEvaluator.Evaluate(message, playerText, response =>
+        {
+            outputText.text = response;
+            OnResponseReady?.Invoke();
+        });
+    }
+
     private string BuildPrompt(string original, string player)
     {
         return $@"
@@ -192,7 +220,7 @@ public class GeminiCore : MonoBehaviour
 
         CHARACTER:
         An eccentric, ageing British WW2 officer. Slightly unhinged but competent. 
-        Speaks with dry, dark humour. Treats serious situations with inappropriate levity.
+        Speaks with dry, dark humour. Treats serious situations with inappropriate levity. You are Sergeant Jenkins.
 
         TONE RULES:
         - British phrasing and vocabulary (""good lord"", ""man"", ""bloody"", ""splendid mess"")

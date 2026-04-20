@@ -4,6 +4,9 @@ using UnityEngine;
 public class Message : ScriptableObject
 {   
     public AudioClip audioClip;
-    [TextArea]public string message;
+    [TextArea] public string message;
     public SignalRequirement[] requirements;
+
+    [Tooltip("Words the player must include in their transcription to be scored correctly.")]
+    public string[] keywords;
 }

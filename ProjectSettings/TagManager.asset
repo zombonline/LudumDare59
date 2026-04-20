@@ -44,6 +44,9 @@ TagManager:
   - name: Notepad
     uniqueID: 2411307199
     locked: 0
+  - name: Result Screen
+    uniqueID: 2408323785
+    locked: 0
   - name: Hand
     uniqueID: 1254634735
     locked: 0

@@ -21,12 +21,14 @@ public class GameStateManager : MonoBehaviour
     [SerializeField] private AudioSource messageAudioSource;
     [Range(0f, 1f)]
     [SerializeField] private float messageThreshold = 0.7f;
+    [SerializeField] private float messageStartDelay = 1.5f;
 
     [Header("Transcribing")]
     [SerializeField] private float transcribeTimeLimit = 60f;
     [SerializeField] private TextInput transcribeInput;
 
     private bool _messageStarted = false;
+    private float _tuningLockoutTimer = 0f;
 
     private void Awake()
     {
@@ -61,6 +63,12 @@ public class GameStateManager : MonoBehaviour
 
     private void UpdateTuning()
     {
+        if (_tuningLockoutTimer > 0f)
+        {
+            _tuningLockoutTimer -= Time.deltaTime;
+            return;
+        }
+
         if (!_messageStarted && signalController.SignalQuality >= messageThreshold)
         {
             _messageStarted = true;
@@ -106,7 +114,10 @@ public class GameStateManager : MonoBehaviour
     private void SetState(GameState newState)
     {
         if (newState == GameState.Tuning)
+        {
             signalController.LoadRequirements(messages[_currentMessageIndex]);
+            _tuningLockoutTimer = messageStartDelay;
+        }
         CurrentState = newState;
         if (newState == GameState.Transcribing)
             TimeRemaining = transcribeTimeLimit;

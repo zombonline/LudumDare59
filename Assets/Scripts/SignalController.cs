@@ -20,7 +20,6 @@ public class SignalController : MonoBehaviour
 
 
     [SerializeField] private List<SignalBinding> bindings = new();
-    [SerializeField] private TextMeshProUGUI outputText;
 
     public float SignalQuality { get; private set; }
 
@@ -57,12 +56,12 @@ public class SignalController : MonoBehaviour
             float score = binding.Requirement.Evaluate(binding.SignalSource, AudioController.Instance.GetMessageProgress());
             total += score;
             activeCount++;
-            binding.feedbackText.text = binding.Requirement.label + ": " + score + "/1\n";
+            if(binding.feedbackText != null)
+                binding.feedbackText.text = binding.Requirement.label + ": " + score + "/1\n";
             binding.SignalDisplay?.UpdateDisplay(score);
         }
 
         SignalQuality = activeCount > 0 ? total / activeCount : 0f;
-        outputText.text = "SignalQuality: " + SignalQuality;
     }
     
     /// <summary>Matches requirements from the given message to bindings by label.</summary>
