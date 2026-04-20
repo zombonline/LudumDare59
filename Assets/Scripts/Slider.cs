@@ -1,9 +1,9 @@
+using System;
 using UnityEngine;
 
 public class Slider : MonoBehaviour, IInteractable, ISignalSource
 {
     [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] private Color standardColor, hoveredColor, pressedColor;
 
     [Header("Handle")]
     [SerializeField] private Transform handle;
@@ -31,13 +31,20 @@ public class Slider : MonoBehaviour, IInteractable, ISignalSource
         }
     }
 
-    public void OnHoverEnter() => spriteRenderer.color = hoveredColor;
-    public void OnHoverExit()  => spriteRenderer.color = standardColor;
-    public void OnGrab()       => spriteRenderer.color = pressedColor;
+    private void Start()
+    {
+        UpdateHandlePosition();
+    }
+
+    public void OnHoverEnter()
+    {
+    }
+
+    public void OnHoverExit() {}
+    public void OnGrab() {}
 
     public void OnRelease()
     {
-        spriteRenderer.color = standardColor; 
         UpdateHandlePosition(false);
     }
 
@@ -58,5 +65,14 @@ public class Slider : MonoBehaviour, IInteractable, ISignalSource
         handle.localPosition = vertical
             ? new Vector3(0f, offset, 0f)
             : new Vector3(offset, 0f, 0f);
+    }
+
+    private void OnDrawGizmos()
+    {
+        //draw range
+        Vector2 left = new Vector2(transform.position.x+(-slideRange / 2f), transform.position.y);
+        Vector2 right = new Vector2(transform.position.x+(slideRange / 2f), transform.position.y);
+        
+        Gizmos.DrawLine(left,right);
     }
 }

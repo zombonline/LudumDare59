@@ -1,24 +1,34 @@
+using System;
 using UnityEngine;
 
 public class Button : MonoBehaviour, IInteractable, ISignalSource
 {
     [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] private Color standardColor, hoveredColor, pressedColor;
     [SerializeField] private int channelCount = 5;
-
+    [SerializeField] private Sprite[] buttonSprites;
+    [SerializeField] private AudioClip[] buttonSounds;
     private int _currentChannel = 0;
 
     public float Value => channelCount <= 1 ? 0f : _currentChannel / (float)(channelCount - 1);
 
-    public void OnHoverEnter() => spriteRenderer.color = hoveredColor;
-    public void OnHoverExit()  => spriteRenderer.color = standardColor;
-    public void OnRelease()    => spriteRenderer.color = standardColor;
+    private void Start()
+    {
+        spriteRenderer.sprite = buttonSprites[_currentChannel];
+    }
+
+    public void OnHoverEnter()
+    {
+    }
+
+    public void OnHoverExit(){}
+    public void OnRelease() {}
     public void OnDrag(Vector2 delta) { }
     public Vector3? DesiredHandPosition { get; }
 
     public void OnGrab()
     {
         _currentChannel = (_currentChannel + 1) % channelCount;
-        spriteRenderer.color = pressedColor;
+        spriteRenderer.sprite = buttonSprites[_currentChannel];
+        AudioSource.PlayClipAtPoint(buttonSounds[_currentChannel], transform.position);
     }
 }
