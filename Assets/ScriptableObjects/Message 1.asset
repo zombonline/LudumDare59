@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d6860fade4297d41998b05fd22c0a52, type: 3}
+  m_Name: Message 1
+  m_EditorClassIdentifier: Assembly-CSharp::Message
+  audioClip: {fileID: 8300000, guid: 9dc5d5a0ea7b61044b5e02730d0ec82c, type: 3}
+  message: "Welcome onboard Lieutenant, I trust Sergeant Jenkins has given you a
+    thorough rundown of today\u2019s itinerary. Let\u2019s begin quickly and let\u2019s
+    move fast. Today we\u2019ll be expecting bombardments in the marked artillery
+    zone C-21. Stand by for my command and do not enter the zone without target confirmation.
+    I repeat, do not enter the zone without target confirmation, only enter when
+    you do have confirmation directly from me. Looking forward to thrashing these
+    rapscallions for good. Cheerio. Over and out."
+  requirements:
+  - label: F
+    targetValueCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0.095458984
+        inSlope: 0.17104368
+        outSlope: 0.17104368
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33537778
+      - serializedVersion: 3
+        time: 0.32060775
+        value: 0.10320249
+        inSlope: -0.0007690771
+        outSlope: -0.0007690771
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.27654222
+        outWeight: 0.17280826
+      - serializedVersion: 3
+        time: 0.7157333
+        value: 0.14194095
+        inSlope: 0.0070591453
+        outSlope: 0.0070591453
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.1750804
+        outWeight: 0.2969007
+      - serializedVersion: 3
+        time: 0.9953613
+        value: 0.12369537
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    bandwidth: 0.1
+  - label: C
+    targetValueCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0.5
+        inSlope: 0.9953805
+        outSlope: 0.9953805
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.50232047
+        value: 1
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    bandwidth: 0.2

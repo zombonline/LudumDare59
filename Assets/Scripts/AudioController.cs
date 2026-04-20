@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -6,20 +7,28 @@ public class AudioController : MonoBehaviour
     private const string SignalVolumeParam = "SignalVolume";
     private const string InterferenceVolumeParam = "InterferenceVolume";
     private const string SignalDistortionParam = "SignalDistortion";
+    
+    public static AudioController Instance { get; private set; }
 
     [SerializeField] private AudioMixer mixer;
     [SerializeField] private SignalController signalController;
 
     [SerializeField] private AudioSource staticSource;
-    
+    [SerializeField] private AudioSource messageSource;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
-        GameStateManager.Instance.OnStateChanged += OnGameStateChaned;
+        GameStateManager.Instance.OnStateChanged += OnGameStateChanged;
     }
 
     private void OnDestroy()
     {
-        GameStateManager.Instance.OnStateChanged -= OnGameStateChaned;
+        GameStateManager.Instance.OnStateChanged -= OnGameStateChanged;
     }
     private void Update()
     {
@@ -30,13 +39,24 @@ public class AudioController : MonoBehaviour
     }
 
     /// <summary>Converts a normalized 0-1 volume to decibels for AudioMixer parameters.</summary>
-    private float ToDecibels(float normalizedVolume)
+    public static float ToDecibels(float normalizedVolume)
     {
         return Mathf.Log10(Mathf.Max(normalizedVolume, 0.0001f)) * 20f;
     }
     
-    private void OnGameStateChaned(GameStateManager.GameState newState)
+    private void OnGameStateChanged(GameStateManager.GameState newState)
     {
-        staticSource.mute = newState == GameStateManager.GameState.Tuning;
+        if (newState == GameStateManager.GameState.Tuning)
+            staticSource.Play();
+        else if (newState == GameStateManager.GameState.Transcribing)
+            staticSource.Stop();
+    }
+
+
+    public float GetMessageProgress()
+    {
+        if(!messageSource.isPlaying)
+            return 0f;
+        return messageSource.time/messageSource.clip.length;
     }
 }

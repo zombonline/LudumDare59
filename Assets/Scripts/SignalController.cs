@@ -8,12 +8,14 @@ public class SignalController : MonoBehaviour
     [Serializable]
     public class SignalBinding
     {
+        public string label;                        // matches SignalRequirement.label
         public MonoBehaviour source;
-        public SignalRequirement requirement;
         public TextMeshProUGUI feedbackText;
-        [NonSerialized]
-        public ISignalSource SignalSource;
+
+        [NonSerialized] public ISignalSource SignalSource;
+        [NonSerialized] public SignalRequirement Requirement; // assigned at runtime
     }
+
 
     [SerializeField] private List<SignalBinding> bindings = new();
     [SerializeField] private TextMeshProUGUI outputText;
@@ -42,17 +44,37 @@ public class SignalController : MonoBehaviour
         }
 
         float total = 0f;
+        int activeCount = 0;
 
         foreach (var binding in bindings)
         {
-            if (binding.SignalSource != null)
-            {
-                total += binding.requirement.Evaluate(binding.SignalSource.Value);
-                binding.feedbackText.text = binding.requirement.label + ": " + binding.requirement.Evaluate(binding.SignalSource.Value) + "/1\n";
-            }
+            if (binding.SignalSource == null || binding.Requirement == null) continue;
+
+            float score = binding.Requirement.Evaluate(binding.SignalSource.Value, AudioController.Instance.GetMessageProgress());
+            total += score;
+            activeCount++;
+            binding.feedbackText.text = binding.Requirement.label + ": " + score + "/1\n";
         }
-        SignalQuality = total / bindings.Count;
+
+        SignalQuality = activeCount > 0 ? total / activeCount : 0f;
         outputText.text = "SignalQuality: " + SignalQuality;
     }
+    
+    /// <summary>Matches requirements from the given message to bindings by label.</summary>
+    public void LoadRequirements(Message message)
+    {
+        foreach (var binding in bindings)
+            binding.Requirement = null;
+
+        foreach (var req in message.requirements)
+        {
+            SignalBinding binding = bindings.Find(b => b.label == req.label);
+            if (binding != null)
+                binding.Requirement = req;
+            else
+                Debug.LogWarning($"[SignalController] No binding with label '{req.label}'.");
+        }
+    }
+
     
 }

@@ -14,9 +14,8 @@ public class GeminiCore : MonoBehaviour
     private string url =
         "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=";
     [Header("UI References")]
-    public TMP_InputField inputField;
+    public TextInput textInput;
     public TMP_Text outputText;
-    public UnityEngine.UI.Button sendButton;
 
     private void Awake()
     {
@@ -25,18 +24,18 @@ public class GeminiCore : MonoBehaviour
 
     void Start()
     {
-        sendButton.onClick.AddListener(OnSendClick);
+        textInput.onEnterPressed += OnEnterPressed;
     }
 
-    void LoadApiKey()
+    private void OnDestroy()
     {
-        apiKey = apiKeyTextFile.text;
+        textInput.onEnterPressed -= OnEnterPressed;
     }
 
-    void OnSendClick()
+    private void OnEnterPressed()
     {
-        string original = "Delay the advance by ten minutes while we sort out the mess on the left flank, and make sure everyone understands this is a delay, not a cancellation.";
-        string player = inputField.text;
+        string original = GameStateManager.Instance.CurrentMessage.message;
+        string player = textInput.Text;
 
         if (!string.IsNullOrEmpty(player))
         {
@@ -44,9 +43,13 @@ public class GeminiCore : MonoBehaviour
             StartCoroutine(SendPrompt(prompt));
 
             outputText.text = "Evaluating...";
-            inputField.text = "";
         }
     }
+    void LoadApiKey()
+    {
+        apiKey = apiKeyTextFile.text;
+    }
+    
 
     public IEnumerator SendPrompt(string userPrompt)
     {
@@ -119,7 +122,6 @@ public class GeminiCore : MonoBehaviour
     }
 
     //JSON Utility Classes
-
     [Serializable]
     public class GeminiRequest
     {

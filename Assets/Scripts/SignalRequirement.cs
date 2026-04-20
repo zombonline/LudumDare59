@@ -3,11 +3,11 @@ using UnityEngine;
 public class SignalRequirement
 {
     public string label;
-    public float targetValue = 0.5f;
+    public AnimationCurve targetValueCurve;
     public float bandwidth = 0.1f;
-
-    public float Evaluate(float value)
+    
+    public float Evaluate(float value, float messageProgress)
     {
-        return 1f - Mathf.Clamp01(Mathf.Abs(value - targetValue) / bandwidth);
+        return 1f - Mathf.Clamp01(Mathf.Abs(value - targetValueCurve.Evaluate(messageProgress)) / bandwidth);
     }
 }
