@@ -93,6 +93,11 @@ public class HandController : MonoBehaviour
 
     public void Grab(IInteractable interactable)
     {
+        if (heldInteractable != null)
+        {
+            heldInteractable.OnRelease();
+            heldInteractable.OnHoverExit();
+        }
         heldInteractable = interactable;
         State = HandState.Holding;
         heldInteractable.OnGrab();

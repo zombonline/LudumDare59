@@ -8,6 +8,8 @@ public class GeminiCore : MonoBehaviour
 {
     /// <summary>Fired when the AI response has been received and displayed.</summary>
     public event Action OnResponseReady;
+    /// <summary>Fired with the evaluated severity: "correct", "minor", or "major".</summary>
+    public event Action<string> OnSeverityEvaluated;
     [Header("API Configuration")]
     private string apiKey;
 
@@ -109,10 +111,12 @@ public class GeminiCore : MonoBehaviour
                         if (result != null && !string.IsNullOrEmpty(result.response))
                         {
                             outputText.text = result.response;
+                            OnSeverityEvaluated?.Invoke(result.severity);
                         }
                         else
                         {
                             outputText.text = "Invalid response format.";
+                            OnSeverityEvaluated?.Invoke("minor");
                         }
                         OnResponseReady?.Invoke();
                     }
@@ -191,9 +195,10 @@ public class GeminiCore : MonoBehaviour
         }
 
         Message message = GameStateManager.Instance.CurrentMessage;
-        fallbackEvaluator.Evaluate(message, playerText, response =>
+        fallbackEvaluator.Evaluate(message, playerText, (response, severity) =>
         {
             outputText.text = response;
+            OnSeverityEvaluated?.Invoke(severity);
             OnResponseReady?.Invoke();
         });
     }
@@ -221,6 +226,8 @@ public class GeminiCore : MonoBehaviour
         CHARACTER:
         An eccentric, ageing British WW2 officer. Slightly unhinged but competent. 
         Speaks with dry, dark humour. Treats serious situations with inappropriate levity. You are Sergeant Jenkins.
+        If severity is ""major"": the officer informs the player they are relieved of their post and face a court martial. 
+        Still dry and darkly humorous, but with genuine finality — no room for redemption.
 
         TONE RULES:
         - British phrasing and vocabulary (""good lord"", ""man"", ""bloody"", ""splendid mess"")

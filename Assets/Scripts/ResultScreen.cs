@@ -8,16 +8,19 @@ public class ResultScreen : MonoBehaviour
     [FormerlySerializedAs("continuePrompt")] [SerializeField] private GameObject feedbackDisplay;
 
     private bool _readyToContinue;
+    private bool _triggerGameOver;
 
     private void Start()
     {
         geminiCore.OnResponseReady += OnResponseReady;
+        geminiCore.OnSeverityEvaluated += OnSeverityEvaluated;
         GameStateManager.Instance.OnStateChanged += OnStateChanged;
     }
 
     private void OnDestroy()
     {
         geminiCore.OnResponseReady -= OnResponseReady;
+        geminiCore.OnSeverityEvaluated -= OnSeverityEvaluated;
         if (GameStateManager.Instance != null)
             GameStateManager.Instance.OnStateChanged -= OnStateChanged;
     }
@@ -27,8 +30,14 @@ public class ResultScreen : MonoBehaviour
         if (state != GameStateManager.GameState.Result)
         {
             _readyToContinue = false;
+            _triggerGameOver = false;
             feedbackDisplay?.SetActive(false);
         }
+    }
+
+    private void OnSeverityEvaluated(string severity)
+    {
+        _triggerGameOver = severity == "major";
     }
 
     private void OnResponseReady()
@@ -45,7 +54,10 @@ public class ResultScreen : MonoBehaviour
         if (Keyboard.current.enterKey.wasPressedThisFrame)
         {
             _readyToContinue = false;
-            GameStateManager.Instance.NextMessage();
+            if (_triggerGameOver)
+                GameStateManager.Instance.GameOver();
+            else
+                GameStateManager.Instance.NextMessage();
         }
     }
 }

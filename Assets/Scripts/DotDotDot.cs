@@ -28,7 +28,7 @@ public class DotDotDot : MonoBehaviour
         {
             yield return new WaitForSeconds(delay);
             dotCount++;
-            dotCount = dotCount % 4;
+            dotCount %= 4;
             tmpro.text = originalText + String.Concat(Enumerable.Repeat(".", dotCount));
         }
     }

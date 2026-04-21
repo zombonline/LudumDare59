@@ -8,8 +8,10 @@ using UnityEngine;
 /// </summary>
 public class FallbackEvaluator : MonoBehaviour
 {
-    private const float CorrectThreshold = 0.85f;
-    private const float MinorThreshold   = 0.5f;
+    [Tooltip("Minimum keyword hits required for a 'correct' result.")]
+    [SerializeField] private int correctHitsRequired = 2;
+    [Tooltip("Minimum keyword hits required for a 'minor' result. Below this is 'major'.")]
+    [SerializeField] private int minorHitsRequired = 1;
 
     private static readonly string[] CorrectResponses =
     {
@@ -27,24 +29,27 @@ public class FallbackEvaluator : MonoBehaviour
 
     private static readonly string[] MajorResponses =
     {
-        "Good lord, man. That was the transmission? I weep for the regiment.",
-        "I see. You've turned a straightforward order into something quite catastrophic. Inspiring, in a bleak sort of way.",
-        "Remarkable. You've managed to get almost nothing right. There's a talent in that, I suppose."
+        "That transmission was so catastrophically wrong that I have no choice but to relieve you of your post. You are to report for court martial at first light.",
+        "I have seen men fail under pressure, but this is something else entirely. You are dismissed. Permanently. A court martial will handle the rest.",
+        "Good lord, man. I don't know whether to pity you or have you shot. Court martial, eight o'clock sharp. Don't be late — it would only make things worse."
     };
 
     /// <summary>
     /// Scores the player's transcription against the message's keywords and
-    /// invokes the callback with a canned officer response.
+    /// invokes the callback with the response text and severity string.
     /// </summary>
-    public void Evaluate(Message message, string playerText, Action<string> onComplete)
+    public void Evaluate(Message message, string playerText, Action<string, string> onComplete)
     {
-        float score = ComputeKeywordScore(message.keywords, playerText);
-        onComplete?.Invoke(PickResponse(score));
+        int hits = CountKeywordHits(message.keywords, playerText);
+        string severity = hits >= correctHitsRequired ? "correct"
+                        : hits >= minorHitsRequired   ? "minor"
+                                                      : "major";
+        onComplete?.Invoke(PickResponse(severity), severity);
     }
 
-    private static float ComputeKeywordScore(string[] keywords, string playerText)
+    private static int CountKeywordHits(string[] keywords, string playerText)
     {
-        if (keywords == null || keywords.Length == 0) return 1f;
+        if (keywords == null || keywords.Length == 0) return int.MaxValue;
 
         int hits = 0;
         foreach (string keyword in keywords)
@@ -53,15 +58,14 @@ public class FallbackEvaluator : MonoBehaviour
             if (playerText.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0)
                 hits++;
         }
-
-        return (float)hits / keywords.Length;
+        return hits;
     }
 
-    private static string PickResponse(float score)
+    private static string PickResponse(string severity)
     {
-        string[] pool = score >= CorrectThreshold ? CorrectResponses
-                      : score >= MinorThreshold   ? MinorResponses
-                                                  : MajorResponses;
+        string[] pool = severity == "correct" ? CorrectResponses
+                      : severity == "minor"   ? MinorResponses
+                                              : MajorResponses;
         return pool[UnityEngine.Random.Range(0, pool.Length)];
     }
 }

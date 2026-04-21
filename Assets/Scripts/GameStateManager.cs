@@ -111,6 +111,9 @@ public class GameStateManager : MonoBehaviour
 
     public void Submit() => SetState(GameState.Result);
 
+    /// <summary>Ends the game and returns to the intro scene.</summary>
+    public void GameOver() => SceneLoader.LoadIntro();
+
     private void SetState(GameState newState)
     {
         if (newState == GameState.Tuning)
