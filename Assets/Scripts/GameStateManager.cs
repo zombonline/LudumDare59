@@ -20,7 +20,7 @@ public class GameStateManager : MonoBehaviour
     [SerializeField] private SignalController signalController;
     [SerializeField] private AudioSource messageAudioSource;
     [Range(0f, 1f)]
-    [SerializeField] private float messageThreshold = 0.7f;
+    [SerializeField] private float messageThreshold = 0.9f;
     [SerializeField] private float messageStartDelay = 1.5f;
 
     [Header("Transcribing")]

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d6860fade4297d41998b05fd22c0a52, type: 3}
   m_Name: Message 4
   m_EditorClassIdentifier: Assembly-CSharp::Message
-  audioClip: {fileID: 8300000, guid: 9dc5d5a0ea7b61044b5e02730d0ec82c, type: 3}
+  audioClip: {fileID: 8300000, guid: 267d0b189b14e1d40802717fa8624485, type: 3}
   message: "Supply unit, deliver rations and medical kits to forward base Echo. That
     is base Echo, not Echo-2. Repeat, base Echo. If you arrive at Echo-2, you\u2019ve
     gone too far. Turn back. Medical kits and rations will now be in short supply.
@@ -170,6 +170,50 @@ MonoBehaviour:
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    bandwidth: 0.2
+  - label: F
+    targetValueCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.507
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.50770384
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2

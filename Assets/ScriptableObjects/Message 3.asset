@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d6860fade4297d41998b05fd22c0a52, type: 3}
   m_Name: Message 3
   m_EditorClassIdentifier: Assembly-CSharp::Message
-  audioClip: {fileID: 8300000, guid: 9dc5d5a0ea7b61044b5e02730d0ec82c, type: 3}
+  audioClip: {fileID: 8300000, guid: edab7cff425a22f4899de842a928eea3, type: 3}
   message: All units, disregard the previous coordinates. There has been yet another
     miscalculation. Use grid reference C-12, not C-21. Repeat, C-12. For those of
     you who have used C21 instead of C12, adjust accordingly. If not, stay where
@@ -25,14 +25,14 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: 1.990761
-        outSlope: 1.990761
+        inSlope: 2.631579
+        outSlope: 2.631579
         tangentMode: 34
         weightedMode: 0
         inWeight: 0
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.50232047
+        time: 0.38
         value: 1
         inSlope: Infinity
         outSlope: Infinity
@@ -94,18 +94,27 @@ MonoBehaviour:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
-        inSlope: 0.90778077
-        outSlope: 0.90778077
-        tangentMode: 0
+        value: 0.7377651
+        inSlope: 0.08857871
+        outSlope: 0.08857871
+        tangentMode: 34
         weightedMode: 0
         inWeight: 0
-        outWeight: 0.08832697
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.5084839
+        value: 0.7828059
+        inSlope: 0.0023805983
+        outSlope: 0.0023805983
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 0.2
-        inSlope: 0.2
-        outSlope: 0.2
+        value: 0.74160826
+        inSlope: -0.08381751
+        outSlope: -0.08381751
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -140,41 +149,6 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     bandwidth: 0.2
-  - label: L
-    targetValueCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 1.999999
-        outSlope: 1.999999
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.5
-        value: 0.9999995
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: -Infinity
-        outSlope: -Infinity
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    bandwidth: 0.2
   - label: A
     targetValueCurve:
       serializedVersion: 2
@@ -196,6 +170,41 @@ MonoBehaviour:
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    bandwidth: 0.2
+  - label: B3
+    targetValueCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1.990761
+        outSlope: 1.990761
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.50232047
+        value: 1
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2

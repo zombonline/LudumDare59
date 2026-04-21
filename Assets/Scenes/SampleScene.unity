@@ -618,7 +618,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &46340931
 Transform:
   m_ObjectHideFlags: 0
@@ -1527,7 +1527,7 @@ SpriteRenderer:
   m_SortingLayerID: -1886643511
   m_SortingLayer: 2
   m_SortingOrder: 3
-  m_Sprite: {fileID: 6963322998463068953, guid: 957b8eb215d4c494888d4f6190bd1fa2, type: 3}
+  m_Sprite: {fileID: -82443373062953763, guid: 8dd14f86f8422034ebfd340761e1c4fa, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -2025,7 +2025,7 @@ MonoBehaviour:
   textInput: {fileID: 913105955}
   outputText: {fileID: 1178139174}
   fallbackEvaluator: {fileID: 972996260}
-  requestTimeoutSeconds: 10
+  requestTimeoutSeconds: 20
 --- !u!1 &316057267
 GameObject:
   m_ObjectHideFlags: 0
@@ -2170,7 +2170,7 @@ MonoBehaviour:
   resultScreen: {fileID: 149198304}
   signalController: {fileID: 2096681149}
   messageAudioSource: {fileID: 293746503}
-  messageThreshold: 0.7
+  messageThreshold: 0.9
   messageStartDelay: 1.5
   transcribeTimeLimit: 60
   transcribeInput: {fileID: 913105955}
@@ -3570,6 +3570,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bee20351d75aaaf468a6b115e135d955, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FallbackEvaluator
+  correctHitsRequired: 2
+  minorHitsRequired: 1
 --- !u!4 &972996261
 Transform:
   m_ObjectHideFlags: 0
@@ -7368,6 +7370,8 @@ MonoBehaviour:
   signalController: {fileID: 2096681149}
   staticSource: {fileID: 1512284060}
   messageSource: {fileID: 293746503}
+  signalVolumeMax: 0.45
+  interferenceVolumeMin: 0.6
 --- !u!4 &2017909698
 Transform:
   m_ObjectHideFlags: 0
