@@ -50,10 +50,6 @@ classDiagram
         -recallDecayPerTurn
     }
 
-    class PerfectMemoryStrategy {
-        -observedCards
-    }
-
     TurnManager --> Player
     AbstractPlayer ..|> Player
     HumanPlayer --|> AbstractPlayer
@@ -61,5 +57,4 @@ classDiagram
     AIPlayer --> MemoryStrategy
     RandomMemoryStrategy ..|> MemoryStrategy
     ProbabilisticMemoryStrategy ..|> MemoryStrategy
-    PerfectMemoryStrategy ..|> MemoryStrategy
 ```
