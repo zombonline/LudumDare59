@@ -41,10 +41,6 @@ classDiagram
         +reset()
     }
 
-    class RandomMemoryStrategy {
-        +selectCards() random
-    }
-
     class ProbabilisticMemoryStrategy {
         -recallProbabilities
         -recallDecayPerTurn
@@ -55,6 +51,5 @@ classDiagram
     HumanPlayer --|> AbstractPlayer
     AIPlayer --|> AbstractPlayer
     AIPlayer --> MemoryStrategy
-    RandomMemoryStrategy ..|> MemoryStrategy
     ProbabilisticMemoryStrategy ..|> MemoryStrategy
 ```
